@@ -230,7 +230,7 @@ Output:
 🔥 Prometheus MCP Health Check
 ✅ Node.js version OK
 ✅ MCP SDK available
-✅ ChromaDB connection OK (port 8002)
+✅ ChromaDB connection OK (port 8000)
 ✅ Project structure OK
 ✅ MCP server configured in Claude Code
 🚀 Status: READY TO USE

@@ -369,7 +369,7 @@ ports:
   - "0.0.0.0:8002:8000"
 
 # Client makinelerde
-export CHROMA_HOST=http://192.168.1.100:8002
+export CHROMA_HOST=http://192.168.1.100:8000
 ```
 
 ### 7.2 Config Sync

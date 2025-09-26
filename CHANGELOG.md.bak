@@ -23,7 +23,7 @@ All notable changes to Prometheus Assistant will be documented in this file.
 
 ### 🐳 Infrastructure
 - **docker-compose.yml**: ChromaDB container configuration
-- **Port 8002**: ChromaDB HTTP API endpoint
+- **Port 8000**: ChromaDB HTTP API endpoint
 - **Persistent Storage**: ChromaDB data survives container restarts
 
 ### 📚 Documentation
