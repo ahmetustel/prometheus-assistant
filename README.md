@@ -1,0 +1,366 @@
+# Prometheus Assistant 🔥
+
+**AI-Powered Development Assistant** - Claude Code ile MCP (Model Context Protocol) entegrasyonu
+
+**RAG + ChromaDB** tabanlı sistem. Claude Code'un context window'u dolduğunda veya yeni session'larda bile projelerinizi "hatırlayan" MCP server sistemi. Artık her seferinde projenizi tekrar açıklamak zorunda değilsiniz!
+
+## 🎯 Özellikler
+
+✅ **Persistent Proje Hafızası**: Claude her session'da projenizi tanır
+✅ **Semantic Search**: ChromaDB ile vector-based kod arama
+✅ **RAG System**: Kod parçalarını chunk'lara böler ve embeddings oluşturur
+✅ **Development Takibi**: Son değişiklikler, aktif task'lar, kararlar
+✅ **Context-Aware Öneriler**: Proje mimarisine uygun yardım
+✅ **Multi-Project Support**: Her proje için ayrı ChromaDB collection
+✅ **Real-time File Monitoring**: Dosya değişikliklerini otomatik takip
+
+## 🚀 Hızlı Kurulum
+
+### 1. Repository'yi Clone Et
+```bash
+git clone <repo-url>
+cd prometheus-assistant
+```
+
+### 2. ChromaDB'yi Başlat
+```bash
+# Docker ile ChromaDB'yi çalıştır
+docker-compose up -d
+
+# Kontrol et
+curl http://localhost:8000/api/v1/heartbeat
+```
+
+### 3. Dependencies Yükle
+```bash
+npm install
+```
+
+### 3. MCP Server'ı Claude Code'a Entegre Et
+
+**Otomatik Kurulum (Önerilen):**
+```bash
+./setup-mcp.sh
+```
+
+**Manuel Kurulum:**
+```bash
+# Claude Code'un hangi yolla kurulu olduğunu kontrol et
+claude mcp add prometheus node $(pwd)/src/index.js
+
+# Test et
+claude mcp list
+```
+
+### 4. Test Et
+```bash
+cd /path/to/your/project
+claude
+
+# Claude'da test et:
+/mcp
+"Bu proje hakkında ne biliyorsun?"
+```
+
+## 📋 Supported Claude Code Kurulum Tipileri
+
+### NPM Global (Çoğunlukla Bu)
+```bash
+# Kurulum kontrol
+which claude
+# Output: /Users/user/.nvm/versions/node/vX.X.X/bin/claude
+
+# MCP ekle
+claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
+```
+
+### Yarn Global
+```bash
+# Kurulum kontrol
+which claude
+# Output: /opt/homebrew/bin/claude -> .../yarn/global/...
+
+# MCP ekle (aynı komut)
+claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
+```
+
+### Homebrew
+```bash
+# MCP ekle
+claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
+```
+
+## 🛠️ MCP Tools (5 Adet)
+
+### 1. `get_project_context`
+Projenin tam özeti: dosya yapısı, teknolojiler, son durum
+```
+"Bu proje hakkında detaylı bilgi ver"
+```
+
+### 2. `search_project_knowledge`
+Kodda ve notlarda akıllı arama
+```
+"Authentication middleware nerede?"
+"Form validation nasıl yapılmış?"
+```
+
+### 3. `get_development_status`
+Son değişiklikler, aktif task'lar, next steps
+```
+"Hangi task'larda çalışıyordum?"
+"Son 7 günde ne değiştim?"
+```
+
+### 4. `update_project_context`
+Development kararlarını ve notları kaydetme
+```
+"Bu component için Redux kullanmaya karar verdim"
+# MCP otomatik kaydeder
+```
+
+### 5. `scan_project`
+Proje yapısını yeniden analiz et
+```
+"Büyük değişiklikler yaptım, projeyi yeniden tara"
+```
+
+## 🔄 Gerçek Kullanım Senaryoları
+
+### Session Başlangıcı
+```
+👤 Sen: "Bu CPC projemde kaldığım yerden devam etmek istiyorum"
+
+🤖 Claude (MCP ile): "CPC projenizde son olarak Form Builder sistemi
+   üzerinde çalıştınız. FullScreenFormBuilder.js ve FormBuilder.js
+   dosyaları 25 Eylül'de güncellendi. 85K+ dosyalı Next.js +
+   Redux tabanlı belgelendirme platformu..."
+```
+
+### Context Window Dolduğunda
+```
+# Context window dolsa bile Claude hatırlayacak:
+✅ Proje mimarisi (Multi-tenant SaaS)
+✅ Son çalışılan feature (Form Builder)
+✅ Teknoloji stack (Next.js, Redux, MongoDB)
+✅ Aktif task'lar ve kararlar
+```
+
+### Kod Arama
+```
+👤 Sen: "Customer register componenti nerede?"
+
+🤖 Claude (MCP search): "CPC projenizde customer register:
+   - dashboard/app/cpc-business/register/page.js
+   - dashboard/components/cpc-business/register/UserStepForm.js"
+```
+
+## 🔧 Troubleshooting
+
+### Problem 1: MCP Server Görünmüyor
+```bash
+# Kontrol et
+/mcp
+# "No MCP servers configured" çıkıyorsa:
+
+# Çözüm 1: File permissions
+chmod +x /path/to/prometheus-assistant/src/index.js
+
+# Çözüm 2: Yeniden ekle
+claude mcp remove prometheus
+claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
+```
+
+### Problem 2: "Failed to reconnect"
+```bash
+# Sebep: Permission denied
+# Çözüm:
+chmod -R 755 /path/to/prometheus-assistant/src/
+claude mcp remove prometheus
+claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
+```
+
+### Problem 3: Config Dosyası Bulunamıyor
+```bash
+# Farklı yerler dene:
+mkdir -p ~/.config/claude-desktop
+echo '{"mcpServers": {...}}' > ~/.config/claude-desktop/claude_desktop_config.json
+
+# Veya
+mkdir -p ~/Library/Application\ Support/Claude
+echo '{"mcpServers": {...}}' > ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+## 🔍 Debug Tools
+
+### Health Check
+```bash
+node health-check.cjs
+```
+Output:
+```
+🔥 Prometheus MCP Health Check
+✅ Node.js version OK
+✅ MCP SDK available
+✅ ChromaDB connection OK (port 8000)
+✅ Project structure OK
+✅ MCP server configured in Claude Code
+🚀 Status: READY TO USE
+```
+
+### ChromaDB Health Check
+```bash
+# ChromaDB durumunu kontrol et
+docker ps | grep chroma
+curl http://localhost:8000/api/v1/heartbeat
+
+# ChromaDB collection'ları listele
+curl http://localhost:8000/api/v1/collections
+```
+
+### MCP Debug
+```bash
+./debug-claude-mcp.sh
+```
+
+### Connection Test
+```bash
+# Manual MCP server test
+cd prometheus-assistant
+node src/index.js
+# Server should start and wait for stdio
+```
+
+## 📁 Project Structure
+
+```
+prometheus-assistant/
+├── src/
+│   ├── index.js                    # Main MCP server
+│   ├── services/
+│   │   ├── ProjectContextManager.js # Core logic + ChromaDB search
+│   │   ├── ProjectScanner.js        # File analysis + chunking
+│   │   ├── ChromaDBService.js       # Vector database integration
+│   │   ├── ContextStorage.js        # YAML storage
+│   │   └── FileWatcher.js           # Change monitoring
+│   └── utils/
+├── data/contexts/                   # Project contexts (YAML)
+├── chroma_data/                     # ChromaDB persisted data
+├── docker-compose.yml               # ChromaDB container config
+├── health-check.cjs                 # Health check tool
+├── debug-claude-mcp.sh             # Debug script
+├── setup-mcp.sh                    # Auto installer
+└── install-mcp.sh                  # Update-safe installer
+```
+
+## 🔄 Claude Code Güncellemeleri
+
+Claude Code güncellendiğinde MCP config silinebilir. Çözüm:
+
+```bash
+cd prometheus-assistant
+./install-mcp.sh
+```
+
+Bu script tüm olası config lokasyonlarına MCP setup'ı restore eder.
+
+## 🎯 Best Practices
+
+### 1. Günlük Workflow
+```bash
+# Güne başlarken
+"Bu projede kaldığım yerden devam edeyim"
+
+# Kod ararken
+"Authentication sistemi nasıl çalışıyor?"
+
+# Karar verirken
+"Bu component için hangi pattern kullanayım?"
+
+# Günü bitirirken
+"Bugün form validation sistemi tamamladım"
+# MCP otomatik kaydeder
+```
+
+### 2. Development Notes
+```
+# Önemli kararları kaydet
+"React Hook Form yerine Formik kullanmaya karar verdim çünkü..."
+
+# Task'ları işaretle
+"Customer dashboard responsiveness tamamlandı"
+
+# Next steps belirle
+"Sıradaki task: API rate limiting implementasyonu"
+```
+
+### 3. Multi-Project Management
+```bash
+# Her projeye ayrı context
+cd /path/to/project1
+"Bu projede authentication nasıl?"
+
+cd /path/to/project2
+"Bu projede authentication nasıl?"
+# MCP her proje için ayrı hafıza tutar
+```
+
+## 🌟 Advanced Features
+
+### Semantic Search with ChromaDB
+```javascript
+// Code chunks automatic processing
+// 1. Files → chunks (1500 chars, 200 overlap)
+// 2. Semantic chunks (functions, classes)
+// 3. ChromaDB embeddings
+// 4. Vector similarity search
+
+// Usage:
+"Authentication middleware implementation"
+// → ChromaDB finds similar code chunks across project
+```
+
+### Custom Context Updates
+```javascript
+// Programmatik olarak context güncelle
+update_project_context({
+  type: "decision",
+  content: "Microservice architecture'a geçmeye karar verdik",
+  tags: ["architecture", "microservices", "planning"]
+})
+```
+
+### Search Filters
+```bash
+# Specific file types'ta ara
+search_project_knowledge("validation", {file_types: ["js", "tsx"]})
+
+# Recent changes'de ara
+get_development_status({days_back: 14})
+```
+
+### Project Scanning Options
+```bash
+# Force refresh (büyük değişiklikler sonrası)
+scan_project({force_refresh: true})
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+---
+
+## 🎉 Sonuç
+
+Bu sistem ile Claude Code artık gerçekten projelerinizi "bilen" bir geliştirme partneri haline geliyor. Context window dolsa bile, yeni session'larda bile projelerinizin hafızası korunur.
+
+**Başka bilgisayarlara kurulum için sadece bu README'yi takip et - tüm karşılaştığımız sorunların çözümleri burada! 🚀**

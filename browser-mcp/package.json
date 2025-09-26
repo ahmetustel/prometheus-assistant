@@ -1,0 +1,19 @@
+{
+  "name": "browser-mcp",
+  "version": "1.0.0",
+  "description": "Simple browser automation MCP server for Claude Code",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.4.0",
+    "puppeteer": "^21.5.0"
+  },
+  "bin": {
+    "browser-mcp": "./index.js"
+  },
+  "keywords": ["mcp", "browser", "automation", "claude"],
+  "license": "MIT"
+}
