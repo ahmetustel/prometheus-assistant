@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import crypto from 'crypto';
 
 export class ChromaDBService {
-  constructor(host = 'http://localhost:8000') {
+  constructor(host = 'http://localhost:8002') {
     this.host = host;
     this.client = null;
     this.collections = new Map();

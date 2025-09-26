@@ -5,7 +5,7 @@ services:
     image: chromadb/chroma:latest
     container_name: prometheus-chromadb
     ports:
-      - "8002:8000"
+      - "8000:8000"
     volumes:
       - ./chroma_data:/chroma/chroma
       - ./chroma_config:/chroma/config

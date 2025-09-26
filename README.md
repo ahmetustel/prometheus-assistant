@@ -17,21 +17,24 @@
 ## 🚀 Hızlı Kurulum
 
 ### 1. Repository'yi Clone Et
+
 ```bash
 git clone <repo-url>
 cd prometheus-assistant
 ```
 
 ### 2. ChromaDB'yi Başlat
+
 ```bash
 # Docker ile ChromaDB'yi çalıştır
-docker-compose up -d
+docker compose up -d
 
 # Kontrol et
 curl http://localhost:8000/api/v1/heartbeat
 ```
 
 ### 3. Dependencies Yükle
+
 ```bash
 npm install
 ```
@@ -39,11 +42,13 @@ npm install
 ### 3. MCP Server'ı Claude Code'a Entegre Et
 
 **Otomatik Kurulum (Önerilen):**
+
 ```bash
 ./setup-mcp.sh
 ```
 
 **Manuel Kurulum:**
+
 ```bash
 # Claude Code'un hangi yolla kurulu olduğunu kontrol et
 claude mcp add prometheus node $(pwd)/src/index.js
@@ -53,6 +58,7 @@ claude mcp list
 ```
 
 ### 4. Test Et
+
 ```bash
 cd /path/to/your/project
 claude
@@ -65,6 +71,7 @@ claude
 ## 📋 Supported Claude Code Kurulum Tipileri
 
 ### NPM Global (Çoğunlukla Bu)
+
 ```bash
 # Kurulum kontrol
 which claude
@@ -75,6 +82,7 @@ claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
 ```
 
 ### Yarn Global
+
 ```bash
 # Kurulum kontrol
 which claude
@@ -85,6 +93,7 @@ claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
 ```
 
 ### Homebrew
+
 ```bash
 # MCP ekle
 claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
@@ -93,34 +102,44 @@ claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
 ## 🛠️ MCP Tools (5 Adet)
 
 ### 1. `get_project_context`
+
 Projenin tam özeti: dosya yapısı, teknolojiler, son durum
+
 ```
 "Bu proje hakkında detaylı bilgi ver"
 ```
 
 ### 2. `search_project_knowledge`
+
 Kodda ve notlarda akıllı arama
+
 ```
 "Authentication middleware nerede?"
 "Form validation nasıl yapılmış?"
 ```
 
 ### 3. `get_development_status`
+
 Son değişiklikler, aktif task'lar, next steps
+
 ```
 "Hangi task'larda çalışıyordum?"
 "Son 7 günde ne değiştim?"
 ```
 
 ### 4. `update_project_context`
+
 Development kararlarını ve notları kaydetme
+
 ```
 "Bu component için Redux kullanmaya karar verdim"
 # MCP otomatik kaydeder
 ```
 
 ### 5. `scan_project`
+
 Proje yapısını yeniden analiz et
+
 ```
 "Büyük değişiklikler yaptım, projeyi yeniden tara"
 ```
@@ -128,6 +147,7 @@ Proje yapısını yeniden analiz et
 ## 🔄 Gerçek Kullanım Senaryoları
 
 ### Session Başlangıcı
+
 ```
 👤 Sen: "Bu CPC projemde kaldığım yerden devam etmek istiyorum"
 
@@ -138,6 +158,7 @@ Proje yapısını yeniden analiz et
 ```
 
 ### Context Window Dolduğunda
+
 ```
 # Context window dolsa bile Claude hatırlayacak:
 ✅ Proje mimarisi (Multi-tenant SaaS)
@@ -147,6 +168,7 @@ Proje yapısını yeniden analiz et
 ```
 
 ### Kod Arama
+
 ```
 👤 Sen: "Customer register componenti nerede?"
 
@@ -158,6 +180,7 @@ Proje yapısını yeniden analiz et
 ## 🔧 Troubleshooting
 
 ### Problem 1: MCP Server Görünmüyor
+
 ```bash
 # Kontrol et
 /mcp
@@ -172,6 +195,7 @@ claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
 ```
 
 ### Problem 2: "Failed to reconnect"
+
 ```bash
 # Sebep: Permission denied
 # Çözüm:
@@ -181,6 +205,7 @@ claude mcp add prometheus node /path/to/prometheus-assistant/src/index.js
 ```
 
 ### Problem 3: Config Dosyası Bulunamıyor
+
 ```bash
 # Farklı yerler dene:
 mkdir -p ~/.config/claude-desktop
@@ -194,10 +219,13 @@ echo '{"mcpServers": {...}}' > ~/Library/Application\ Support/Claude/claude_desk
 ## 🔍 Debug Tools
 
 ### Health Check
+
 ```bash
 node health-check.cjs
 ```
+
 Output:
+
 ```
 🔥 Prometheus MCP Health Check
 ✅ Node.js version OK
@@ -209,6 +237,7 @@ Output:
 ```
 
 ### ChromaDB Health Check
+
 ```bash
 # ChromaDB durumunu kontrol et
 docker ps | grep chroma
@@ -219,11 +248,13 @@ curl http://localhost:8000/api/v1/collections
 ```
 
 ### MCP Debug
+
 ```bash
 ./debug-claude-mcp.sh
 ```
 
 ### Connection Test
+
 ```bash
 # Manual MCP server test
 cd prometheus-assistant
@@ -267,6 +298,7 @@ Bu script tüm olası config lokasyonlarına MCP setup'ı restore eder.
 ## 🎯 Best Practices
 
 ### 1. Günlük Workflow
+
 ```bash
 # Güne başlarken
 "Bu projede kaldığım yerden devam edeyim"
@@ -283,6 +315,7 @@ Bu script tüm olası config lokasyonlarına MCP setup'ı restore eder.
 ```
 
 ### 2. Development Notes
+
 ```
 # Önemli kararları kaydet
 "React Hook Form yerine Formik kullanmaya karar verdim çünkü..."
@@ -295,6 +328,7 @@ Bu script tüm olası config lokasyonlarına MCP setup'ı restore eder.
 ```
 
 ### 3. Multi-Project Management
+
 ```bash
 # Her projeye ayrı context
 cd /path/to/project1
@@ -308,6 +342,7 @@ cd /path/to/project2
 ## 🌟 Advanced Features
 
 ### Semantic Search with ChromaDB
+
 ```javascript
 // Code chunks automatic processing
 // 1. Files → chunks (1500 chars, 200 overlap)
@@ -316,21 +351,23 @@ cd /path/to/project2
 // 4. Vector similarity search
 
 // Usage:
-"Authentication middleware implementation"
+"Authentication middleware implementation";
 // → ChromaDB finds similar code chunks across project
 ```
 
 ### Custom Context Updates
+
 ```javascript
 // Programmatik olarak context güncelle
 update_project_context({
   type: "decision",
   content: "Microservice architecture'a geçmeye karar verdik",
-  tags: ["architecture", "microservices", "planning"]
-})
+  tags: ["architecture", "microservices", "planning"],
+});
 ```
 
 ### Search Filters
+
 ```bash
 # Specific file types'ta ara
 search_project_knowledge("validation", {file_types: ["js", "tsx"]})
@@ -340,6 +377,7 @@ get_development_status({days_back: 14})
 ```
 
 ### Project Scanning Options
+
 ```bash
 # Force refresh (büyük değişiklikler sonrası)
 scan_project({force_refresh: true})
